@@ -2,44 +2,53 @@ import java.util.Scanner;
 
 public class QuartoDesafio {
 
+	private static final int TAMANHO_MINIMO = 2;
+	private static final int TAMANHO_MAXIMO = 100;
+
 	public static void main(String[] args) {
-		Scanner teclado = new Scanner(System.in);
+		Scanner scanner = new Scanner(System.in);
 
-		imprimir("Digite um valor");
-		int valorDigitado = teclado.nextInt();
+		System.out.print("Digite a quantidade de casos de teste: ");
+		int n = Integer.parseInt(scanner.nextLine());
 
-		String[] frases = new String[valorDigitado];
+		String[] frases = new String[n];
 
-		for (int i = 0; i < frases.length; i++) {
-			imprimir("Insira um texto");
-			frases[i] = teclado.next();
-			
-			if (frases[i].length() < 2 && frases[i].length() >= 100) {
-				imprimir("O texto deve ter no minimo 2 caracteres ou o máximo de 100 caracteres.");
-				//frases[i] = teclado.nextLine();
+		for (int i = 0; i < n; i++) {
+			System.out.print("Digite a frase " + (i + 1) + " para decifrar: ");
+			String line = scanner.nextLine();
+			frases[i] = line;
+		}
+
+		System.out.println("Frases decifradas:");
+
+		for (String frase : frases) {
+			if (frase.length() < TAMANHO_MINIMO || frase.length() > TAMANHO_MAXIMO) {
+				System.out.println("A frase \"" + frase + "\" deve ter no mínimo " + TAMANHO_MINIMO + " caracteres e no máximo " + TAMANHO_MAXIMO + " caracteres.");
+				continue;
 			}
-			
-			StringBuilder parteUm = new StringBuilder(frases[i].substring(0, frases[i].length() / 2));
-			StringBuilder parteDois = new StringBuilder(frases[i].substring(frases[i].length() / 2));
-			parteUm.reverse();
-			parteDois.reverse();
-			frases[i] = parteUm.toString() + parteDois.toString();
 
+			String decipheredLine = decipherLine(frase);
+			System.out.println(decipheredLine);
 		}
 
-		imprimir("---------");
-
-		for(String frasesEmbaralhadas: frases) {
-			imprimir(frasesEmbaralhadas);
-		}
-		
-
-		
-		teclado.close();
+		scanner.close();
 	}
 
-	private static void imprimir(String texto) {
-		System.out.println(texto);
+	private static String decipherLine(String line) {
+		int length = line.length();
+		int middle = length / 2;
+
+		StringBuilder decipheredLine = new StringBuilder();
+
+		for (int i = middle - 1; i >= 0; i--) {
+			decipheredLine.append(line.charAt(i));
+		}
+
+		for (int i = length - 1; i >= middle; i--) {
+			decipheredLine.append(line.charAt(i));
+		}
+
+		return decipheredLine.toString();
 	}
 
 }
